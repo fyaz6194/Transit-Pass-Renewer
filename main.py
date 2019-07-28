@@ -3,6 +3,9 @@ import sys
 import yaml
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def parse_yml():
@@ -31,7 +34,9 @@ def upass_loadpage(config, driver):
 	"""
 	driver.get("https://upassbc.translink.ca/")
 	option_visible_text = config["university"]
-	select = driver.find_element_by_id("PsiId")
+	 #wait for page to find element or you can use try..execept to catach error if like website change.please use in all codding
+	select = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.ID, "PsiId")))
+	#select = driver.find_element_by_id("PsiId") 
 	driver.execute_script("var select = arguments[0]; for(var i = 0; i < select.options.length; i++){ if(select.options[i].text == arguments[1]){ select.options[i].selected = true; } }", select, option_visible_text);
 
 	driver.find_element_by_name("PsiId").send_keys(Keys.RETURN)
